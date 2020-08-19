@@ -6,8 +6,10 @@ import (
 	"net/http"
 )
 
+// H H
 type H map[string]interface{}
 
+// Context Context
 type Context struct {
 	// origin objects
 	Writer http.ResponseWriter
@@ -28,19 +30,23 @@ func newContext(w http.ResponseWriter, req *http.Request) *Context {
 	}
 }
 
+// PostForm PostForm
 func (c *Context) PostForm(key string) string {
 	return c.Req.FormValue(key)
 }
 
+// Query Query
 func (c *Context) Query(key string) string {
 	return c.Req.URL.Query().Get(key)
 }
 
+// Status 设置状态码
 func (c *Context) Status(code int) {
 	c.StatusCode = code
 	c.Writer.WriteHeader(code)
 }
 
+// SetHeader 设置Header
 func (c *Context) SetHeader(key string, value string) {
 	c.Writer.Header().Set(key, value)
 }
@@ -51,6 +57,7 @@ func (c *Context) String(code int, format string, values ...interface{}) {
 	c.Writer.Write([]byte(fmt.Sprintf(format, values...)))
 }
 
+// JSON 返回JSON数据
 func (c *Context) JSON(code int, obj interface{}) {
 	c.SetHeader("Content-Type", "application/json")
 	c.Status(code)
@@ -60,11 +67,13 @@ func (c *Context) JSON(code int, obj interface{}) {
 	}
 }
 
+// Data 返回Data数据
 func (c *Context) Data(code int, data []byte) {
 	c.Status(code)
 	c.Writer.Write(data)
 }
 
+// HTML 返回HTMl字符串
 func (c *Context) HTML(code int, html string) {
 	c.SetHeader("Content-Type", "text/html")
 	c.Status(code)
